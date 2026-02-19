@@ -45,7 +45,7 @@ async def analyze_with_gemini(all_data):
     
     Return a high-density, professional report for a technical user.
     """
-    response = client.models.generate_content(model="gemini-1.5-flash", contents=prompt)
+    response = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
     return response.text
 
 async def send_notification(message):
