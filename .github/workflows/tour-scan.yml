@@ -1,0 +1,47 @@
+name: Buckethead Tour Scanner
+on:
+  schedule:
+    - cron: '0 17 * * *' # Runs daily at 9:00 AM PST
+  workflow_dispatch:      # Allows manual trigger for testing
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Verify Secret Presence
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "Error: GEMINI_API_KEY is not set in Secrets."
+            exit 1
+          else
+            echo "Success: GEMINI_API_KEY is configured."
+          fi
+
+      - name: Install Dependencies
+        run: |
+          pip install playwright google-genai requests
+          playwright install chromium
+
+      - name: Run Scanner
+        env:
+          NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python main.py
+
+      - name: Commit State Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add last_seen_dates.txt
+          git commit -m "Update last seen tour dates [skip ci]" || echo "No changes to commit"
+          git push
