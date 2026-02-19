@@ -5,21 +5,27 @@ from google import genai
 from playwright.async_api import async_playwright
 
 # Configuration
+# Note: Ensure NOTIFY_WEBHOOK_URL in GitHub Secrets is the full URL:
+# https://api.telegram.org/bot<TOKEN>/sendMessage?chat_id=<ID>
+TELEGRAM_URL = os.getenv("NOTIFY_WEBHOOK_URL")
+GEMINI_KEY = os.getenv("GEMINI_API_KEY")
+
 VENUES = {
     "Official Site": "https://www.bucketheadtour.us/",
     "Roseland Theater": "https://roselandpdx.com/",
     "Crystal Ballroom": "https://www.mcmenamins.com/events",
     "McDonald Theatre": "https://mcdonaldtheatre.com/events"
 }
+
 STATE_FILE = "last_seen_dates.txt"
-# This URL should be in the format: 
-# https://api.telegram.org/bot<TOKEN>/sendMessage?chat_id=<CHAT_ID>
-TELEGRAM_URL = os.getenv("NOTIFY_WEBHOOK_URL")
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+# Initialize Gemini Client
+client = genai.Client(api_key=GEMINI_KEY)
 
 async def get_page_content(browser, url):
     page = await browser.new_page()
     try:
+        # Standard timeout for modern JS-heavy venue sites
         await page.goto(url, wait_until="networkidle", timeout=60000)
         content = await page.inner_text("body")
         return content
@@ -31,28 +37,44 @@ async def get_page_content(browser, url):
 
 async def analyze_with_gemini(all_data):
     prompt = f"""
-    You are a technical advisor analyzing concert tour data for Buckethead.
+    Analyze the following concert data for Buckethead (Brian Carroll).
     
-    Data from multiple sites:
+    Data:
     {all_data}
     
-    Current Target: Salem, Oregon.
-    Task:
-    1. Identify any direct matches for 'Buckethead' or 'Brian Carroll' in Oregon.
-    2. Analyze the March 14 (Santa Cruz, CA) to April 14 (Tucson, AZ) gap. 
-    3. Determine if the current venue calendars for Roseland, Crystal Ballroom, or McDonald Theatre have unassigned dates in that window.
-    4. Provide a probability (Low/Med/High) of an impending Oregon announcement based on geographic flow.
+    Context:
+    - User is located in Salem, Oregon.
+    - Known Gap: March 14 (Santa Cruz, CA) to April 14 (Tucson, AZ).
     
-    Return a high-density, professional report for a technical user.
+    Task:
+    1. Check for Oregon dates (Portland, Salem, Eugene).
+    2. Analyze the 30-day gap. Identify if any listed venues have open dates in late March/early April.
+    3. Estimate the probability of an Oregon show being added based on geographic proximity to the California/Arizona route.
+    
+    Provide a direct, data-driven report.
     """
-    response = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
+    
+    # Using Gemini 2.0 Flash for current compatibility
+    response = client.models.generate_content(
+        model="gemini-2.0-flash", 
+        contents=prompt
+    )
     return response.text
 
-async def send_notification(message):
-    # Appends the message to the text parameter for Telegram
-    url = f"{TELEGRAM_URL}&text={requests.utils.quote(message)}"
-    response = requests.get(url)
-    return response.status_code
+def send_telegram_notification(message):
+    if not TELEGRAM_URL:
+        print("Error: TELEGRAM_URL not configured.")
+        return
+        
+    # Append message to the base sendMessage URL
+    encoded_msg = requests.utils.quote(message)
+    url = f"{TELEGRAM_URL}&text={encoded_msg}"
+    
+    try:
+        response = requests.get(url)
+        print(f"Telegram Notification Sent. Status: {response.status_code}")
+    except Exception as e:
+        print(f"Failed to send Telegram message: {e}")
 
 async def run_agent():
     async with async_playwright() as p:
@@ -60,24 +82,27 @@ async def run_agent():
         
         aggregated_data = ""
         for name, url in VENUES.items():
+            print(f"Scraping {name}...")
             content = await get_page_content(browser, url)
-            aggregated_data += f"\n--- SOURCE: {name} ---\n{content}\n"
+            aggregated_data += f"\n--- {name} ---\n{content}\n"
         
-        # Load previous state to avoid duplicate notifications
+        # State Check
         last_state = ""
         if os.path.exists(STATE_FILE):
             with open(STATE_FILE, "r") as f:
                 last_state = f.read()
 
-        # Execute only if the data has changed
-        if aggregated_data != last_state:
+        if aggregated_data.strip() != last_state.strip():
+            print("Changes detected. Analyzing...")
             analysis = await analyze_with_gemini(aggregated_data)
-            await send_notification(f"🤖 Buckethead Agent Report\n\n{analysis}")
+            
+            report = f"🤖 Buckethead Tour Report\n\n{analysis}"
+            send_telegram_notification(report)
             
             with open(STATE_FILE, "w") as f:
                 f.write(aggregated_data)
         else:
-            print("No changes detected since last scan.")
+            print("No new data found since last check.")
         
         await browser.close()
 
