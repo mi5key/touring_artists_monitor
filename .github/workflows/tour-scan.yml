@@ -1,7 +1,7 @@
-name: Buckethead Tour Scanner
+name: Tour Scanner
 on:
   schedule:
-    - cron: '0 17 * * *' # Runs daily at 9:00 AM PST
+    - cron: '0 17,23,5 * * *' # Runs three times daily at 9am, 3pm, 9pm PST
   workflow_dispatch:      # Allows manual trigger for testing
 
 jobs:
