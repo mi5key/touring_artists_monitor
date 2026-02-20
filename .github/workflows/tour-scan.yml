@@ -1,4 +1,4 @@
-name: Buckethead Tour Scanner
+name: Tour Scanner
 
 on:
   schedule:
