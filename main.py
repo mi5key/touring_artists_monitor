@@ -58,17 +58,19 @@ async def analyze_with_gemini(all_data):
     return response.text
 
 def send_telegram_notification(message):
+    print(f"DEBUG: Attempting to send message. URL length: {len(TELEGRAM_URL) if TELEGRAM_URL else 0}")
     if not TELEGRAM_URL:
-        print("Error: NOTIFY_WEBHOOK_URL environment variable is empty.")
+        print("DEBUG ERROR: TELEGRAM_URL is None")
         return
         
     url = f"{TELEGRAM_URL}&text={requests.utils.quote(message)}"
     try:
         response = requests.get(url, timeout=15)
-        print(f"Telegram Response: {response.status_code}")
+        # This will print the actual error from Telegram (e.g., {"ok":false,"error_code":400...})
+        print(f"DEBUG Telegram API Response: {response.status_code} - {response.text}")
     except Exception as e:
-        print(f"Failed to reach Telegram: {e}")
-
+        print(f"DEBUG Connection Error: {e}")
+        
 async def run_agent():
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
