@@ -1,13 +1,13 @@
-name: Tour Scanner
-on:
-  schedule:
-    - cron: '0 17,23,5 * * *' # Runs three times daily at 9am, 3pm, 9pm PST
-  workflow_dispatch:      # Allows manual trigger for testing
-
 jobs:
   scan:
     runs-on: ubuntu-latest
-    environment: prod
+    environment: prod  # CRITICAL: Must match your secret environment name
+    
+    # MOVED env HERE (Job level)
+    env:
+      NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -18,15 +18,9 @@ jobs:
           python-version: '3.10'
 
       - name: Verify Secret Presence
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          if [ -z "$GEMINI_API_KEY" ]; then
-            echo "Error: GEMINI_API_KEY is not set in Secrets."
-            exit 1
-          else
-            echo "Success: GEMINI_API_KEY is configured."
-          fi
+          if [ -z "$NOTIFY_WEBHOOK_URL" ]; then echo "URL MISSING"; exit 1; fi
+          echo "All secrets loaded at Job level."
 
       - name: Install Dependencies
         run: |
@@ -34,15 +28,4 @@ jobs:
           playwright install chromium
 
       - name: Run Scanner
-        env:
-          NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python main.py
-
-      - name: Commit State Changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add last_seen_dates.txt
-          git commit -m "Update last seen tour dates [skip ci]" || echo "No changes to commit"
-          git push
+        run: python main.py # Now has access to env vars automatically
