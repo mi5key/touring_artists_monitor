@@ -6,7 +6,7 @@ from playwright.async_api import async_playwright
 
 # --- Configuration ---
 # Ensure NOTIFY_WEBHOOK_URL is: https://api.telegram.org/bot<TOKEN>/sendMessage?chat_id=<ID>
-# NOTIFY_WEBHOOK_URL=https://api.telegram.org/bot8205426690:AAEMlWsyqreBiKuYnJC0LN6_QwB4D34xp2o/sendMessage?chat_id=8518668055
+# 
 TELEGRAM_URL = os.getenv("NOTIFY_WEBHOOK_URL")
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 
