@@ -1,12 +1,26 @@
+name: Buckethead Tour Scanner
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Runs every 6 hours
+  workflow_dispatch:      # Allows manual trigger for testing
+
 jobs:
   scan:
     runs-on: ubuntu-latest
-    environment: prod  # CRITICAL: Must match your secret environment name
     
-    # MOVED env HERE (Job level)
+    # 1. LINK TO ENVIRONMENT
+    # This must match the exact name of the environment in your GitHub Settings
+    environment: prod 
+    
+    # 2. JOB-LEVEL ENVIRONMENT VARIABLES
+    # By placing these here, every 'step' below can see them.
     env:
       NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+    permissions:
+      contents: write     # Required to push last_seen_dates.txt
 
     steps:
       - name: Checkout Repository
@@ -19,8 +33,15 @@ jobs:
 
       - name: Verify Secret Presence
         run: |
-          if [ -z "$NOTIFY_WEBHOOK_URL" ]; then echo "URL MISSING"; exit 1; fi
-          echo "All secrets loaded at Job level."
+          if [ -z "$NOTIFY_WEBHOOK_URL" ]; then
+            echo "::error::NOTIFY_WEBHOOK_URL is missing or empty in the 'prod' environment."
+            exit 1
+          fi
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::error::GEMINI_API_KEY is missing or empty in the 'prod' environment."
+            exit 1
+          fi
+          echo "All secrets successfully loaded at the Job level."
 
       - name: Install Dependencies
         run: |
@@ -28,4 +49,12 @@ jobs:
           playwright install chromium
 
       - name: Run Scanner
-        run: python main.py # Now has access to env vars automatically
+        run: python main.py
+
+      - name: Commit State Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add last_seen_dates.txt
+          git commit -m "Update tour state [skip ci]" || echo "No changes to commit"
+          git push
