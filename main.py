@@ -4,9 +4,8 @@ import asyncio
 from google import genai
 from playwright.async_api import async_playwright
 
-# Configuration
-# Note: Ensure NOTIFY_WEBHOOK_URL in GitHub Secrets is the full URL:
-# https://api.telegram.org/bot<TOKEN>/sendMessage?chat_id=<ID>
+# --- Configuration ---
+# Ensure NOTIFY_WEBHOOK_URL is: https://api.telegram.org/bot<TOKEN>/sendMessage?chat_id=<ID>
 TELEGRAM_URL = os.getenv("NOTIFY_WEBHOOK_URL")
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 
@@ -25,7 +24,7 @@ client = genai.Client(api_key=GEMINI_KEY)
 async def get_page_content(browser, url):
     page = await browser.new_page()
     try:
-        # Standard timeout for modern JS-heavy venue sites
+        # 60s timeout for modern JS-heavy venue sites
         await page.goto(url, wait_until="networkidle", timeout=60000)
         content = await page.inner_text("body")
         return content
@@ -43,18 +42,15 @@ async def analyze_with_gemini(all_data):
     {all_data}
     
     Context:
-    - User is located in Salem, Oregon.
-    - Known Gap: March 14 (Santa Cruz, CA) to April 14 (Tucson, AZ).
+    - User location: Salem, Oregon.
+    - Focus Window: March 14 (Santa Cruz, CA) to April 14 (Tucson, AZ).
     
     Task:
-    1. Check for Oregon dates (Portland, Salem, Eugene).
-    2. Analyze the 30-day gap. Identify if any listed venues have open dates in late March/early April.
-    3. Estimate the probability of an Oregon show being added based on geographic proximity to the California/Arizona route.
-    
-    Provide a direct, data-driven report.
+    1. Search for Oregon dates (Portland, Salem, Eugene).
+    2. Analyze the 30-day gap. List any open dates for the target venues.
+    3. Calculate probability of an Oregon addition based on geographic routing.
     """
     
-    # Using Gemini 2.0 Flash for current compatibility
     response = client.models.generate_content(
         model="gemini-2.0-flash", 
         contents=prompt
@@ -63,18 +59,15 @@ async def analyze_with_gemini(all_data):
 
 def send_telegram_notification(message):
     if not TELEGRAM_URL:
-        print("Error: TELEGRAM_URL not configured.")
+        print("Error: NOTIFY_WEBHOOK_URL environment variable is empty.")
         return
         
-    # Append message to the base sendMessage URL
-    encoded_msg = requests.utils.quote(message)
-    url = f"{TELEGRAM_URL}&text={encoded_msg}"
-    
+    url = f"{TELEGRAM_URL}&text={requests.utils.quote(message)}"
     try:
-        response = requests.get(url)
-        print(f"Telegram Notification Sent. Status: {response.status_code}")
+        response = requests.get(url, timeout=15)
+        print(f"Telegram Response: {response.status_code}")
     except Exception as e:
-        print(f"Failed to send Telegram message: {e}")
+        print(f"Failed to reach Telegram: {e}")
 
 async def run_agent():
     async with async_playwright() as p:
@@ -82,16 +75,17 @@ async def run_agent():
         
         aggregated_data = ""
         for name, url in VENUES.items():
-            print(f"Scraping {name}...")
+            print(f"Checking {name}...")
             content = await get_page_content(browser, url)
             aggregated_data += f"\n--- {name} ---\n{content}\n"
         
-        # State Check
+        # State Management
         last_state = ""
         if os.path.exists(STATE_FILE):
             with open(STATE_FILE, "r") as f:
                 last_state = f.read()
 
+        # Comparison Logic
         if aggregated_data.strip() != last_state.strip():
             print("Changes detected. Analyzing...")
             analysis = await analyze_with_gemini(aggregated_data)
@@ -102,7 +96,10 @@ async def run_agent():
             with open(STATE_FILE, "w") as f:
                 f.write(aggregated_data)
         else:
-            print("No new data found since last check.")
+            # Heartbeat Notification
+            print("No changes. Sending heartbeat...")
+            heartbeat = "✅ Heartbeat: No changes detected on venue sites. Monitoring active."
+            send_telegram_notification(heartbeat)
         
         await browser.close()
 
