@@ -58,18 +58,26 @@ async def analyze_with_gemini(all_data):
     return response.text
 
 def send_telegram_notification(message):
-    print(f"DEBUG: Attempting to send message. URL length: {len(TELEGRAM_URL) if TELEGRAM_URL else 0}")
     if not TELEGRAM_URL:
-        print("DEBUG ERROR: TELEGRAM_URL is None")
+        print("CRITICAL: NOTIFY_WEBHOOK_URL is None")
         return
         
-    url = f"{TELEGRAM_URL}&text={requests.utils.quote(message)}"
+    # Proper URL encoding is mandatory for automated agents
+    import urllib.parse
+    encoded_message = urllib.parse.quote(message)
+    url = f"{TELEGRAM_URL}&text={encoded_message}"
+    
+    print(f"DEBUG: Dispatching request to Telegram...")
     try:
-        response = requests.get(url, timeout=15)
-        # This will print the actual error from Telegram (e.g., {"ok":false,"error_code":400...})
-        print(f"DEBUG Telegram API Response: {response.status_code} - {response.text}")
+        response = requests.get(url, timeout=20)
+        # THIS LINE REVEALS THE TRUTH:
+        print(f"DEBUG Response Code: {response.status_code}")
+        print(f"DEBUG Full JSON Response: {response.text}")
+        
+        if response.status_code != 200:
+            print(f"ERROR: Telegram API rejected the request: {response.text}")
     except Exception as e:
-        print(f"DEBUG Connection Error: {e}")
+        print(f"ERROR: Connection to Telegram failed: {e}")
         
 async def run_agent():
     async with async_playwright() as p:
