@@ -836,13 +836,6 @@ CALENDAR OF EVENTS
 Ticketed by AXS.com
   View All
 Showbox Presents
-Tour 2026
-KWN
- SUN, MAR 8, 2026
- SHOW 8:00 PM
-@ THE SHOWBOX
-BUY TICKETS
-Showbox Presents
 INDIGO DE SOUZA
 with Mothé
  TUE, MAR 10, 2026
@@ -980,6 +973,13 @@ with Tiffany Day
  SHOW 8:00 PM
 @ THE SHOWBOX
 BUY TICKETS
+Showbox Presents
+MACHINE GIRL
+with Sextile, LustSickPuppy
+ TUE, MAR 24, 2026
+ SHOW 8:00 PM
+@ SHOWBOX SODO
+BUY TICKETS
 LOAD MORE EVENTS
             
 The Showbox
@@ -1011,7 +1011,7 @@ Accept All
 --- Cascades Ridgefield ---
 Skip to content
 
-41°
+37°
 
 SHOWS
 FILTER
@@ -1231,18 +1231,6 @@ Select Year
 LIST
 MARCH 2026
 	
-JOSEPH
-The Neptune Theatre
-Sunday, Mar. 8, 2026
-8pm
-GET TICKETS
-	
-MAR. 8
-8:00 PM
- The Neptune Theatre
-1303 Northeast 45th Street, Seattle, WA 98105
-TICKETS & INFO
-	
 TWO FEET
 The Neptune Theatre
 Monday, Mar. 9, 2026
@@ -1370,6 +1358,18 @@ GET TICKETS
 	
 MAR. 27
 8:00 PM
+ The Neptune Theatre
+1303 Northeast 45th Street, Seattle, WA 98105
+TICKETS & INFO
+	
+TRAIL RUNNING FILM FESTIVAL 2026
+The Neptune Theatre
+Saturday, Mar. 28, 2026
+6pm
+GET TICKETS
+	
+MAR. 28
+6:00 PM
  The Neptune Theatre
 1303 Northeast 45th Street, Seattle, WA 98105
 TICKETS & INFO
