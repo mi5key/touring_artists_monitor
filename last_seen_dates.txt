@@ -869,13 +869,6 @@ SIGN-UP
 CALENDAR OF EVENTS
 Ticketed by AXS.com
   View All
-Showbox Presents
-INDIGO DE SOUZA
-with Mothé
- TUE, MAR 10, 2026
- SHOW 8:00 PM
-@ THE SHOWBOX
-BUY TICKETS
 Barstool Sports Presents
 The Best Tour On Earth
 CHICKS IN THE OFFICE
@@ -1014,6 +1007,13 @@ with Sextile, LustSickPuppy
  SHOW 8:00 PM
 @ SHOWBOX SODO
 BUY TICKETS
+Showbox Presents
+THE WONDER YEARS
+with Knuckle Puck, Initiate
+ WED, MAR 25, 2026
+ SHOW 7:00 PM
+@ SHOWBOX SODO
+BUY TICKETS
 LOAD MORE EVENTS
             
 The Showbox
@@ -1045,7 +1045,7 @@ Accept All
 --- Cascades Ridgefield ---
 Skip to content
 
-41°
+43°
 
 SHOWS
 FILTER
