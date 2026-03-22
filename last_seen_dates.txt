@@ -1080,7 +1080,7 @@ Accept All
 --- Cascades Ridgefield ---
 Skip to content
 
-46°
+50°
 
 SHOWS
 FILTER
@@ -1300,18 +1300,6 @@ Select Year
 LIST
 MARCH 2026
 	
-FREE NEPTUNE TOUR
-REPEATING EVENT
-3rd Saturday of the month
-10am to 12pm
-MAKE A RESERVATION
-	
-MAR. 21
-10:00 AM - 12:00 PM
- The Neptune Theatre
-1303 Northeast 45th Street, Seattle, WA 98105
-TICKETS & INFO
-	
 HALWA BY AMIT TANDON
 REPEATING EVENT
 The Neptune Theatre
@@ -1320,7 +1308,7 @@ Saturday, Mar. 21, 2026
 GET TICKETS
 	
 MAR. 21
-3:30 PM
+7:00 PM
  The Neptune Theatre
 1303 Northeast 45th Street, Seattle, WA 98105
 TICKETS & INFO
@@ -1444,6 +1432,19 @@ GET TICKETS
 	
 APR. 10
 7:00 PM
+ The Neptune Theatre
+1303 Northeast 45th Street, Seattle, WA 98105
+TICKETS & INFO
+	
+ON CINEMA LIVE
+REPEATING EVENT
+The Neptune Theatre
+Saturday, Apr. 11, 2026
+4pm & 8pm
+GET TICKETS
+	
+APR. 11
+4:00 PM
  The Neptune Theatre
 1303 Northeast 45th Street, Seattle, WA 98105
 TICKETS & INFO
