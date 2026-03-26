@@ -1097,7 +1097,7 @@ Accept All
 --- Cascades Ridgefield ---
 Skip to content
 
-39°
+33°
 
 SHOWS
 FILTER
@@ -1317,15 +1317,6 @@ Select Year
 LIST
 MARCH 2026
 	
-ODUMODUBLVCK – CANCELED
-CANCELED
-	
-MAR. 25
-8:00 PM
- The Neptune Theatre
-1303 Northeast 45th Street, Seattle, WA 98105
-TICKETS & INFO
-	
 HARLAND WILLIAMS
 The Neptune Theatre
 Friday, Mar. 27, 2026
@@ -1457,6 +1448,18 @@ GET TICKETS
 	
 APR. 16
 8:00 PM
+ The Neptune Theatre
+1303 Northeast 45th Street, Seattle, WA 98105
+TICKETS & INFO
+	
+BLOODYWOOD
+The Neptune
+Friday, Apr. 17, 2026
+7pm
+GET TICKETS
+	
+APR. 17
+7:00 PM
  The Neptune Theatre
 1303 Northeast 45th Street, Seattle, WA 98105
 TICKETS & INFO
