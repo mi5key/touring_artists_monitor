@@ -929,7 +929,6 @@ PLAN YOUR VISIT
 EVENT RENTALS
 PARTNERS
 SIGN-UP
-BUY TICKETS
 CALENDAR OF EVENTS
 Ticketed by AXS.com
   View All
@@ -1111,7 +1110,7 @@ Accept All
 --- Cascades Ridgefield ---
 Skip to content
 
-40°
+38°
 
 SHOWS
 FILTER
@@ -1350,18 +1349,6 @@ Select Year
 LIST
 APRIL 2026
 	
-SOEN + DARK TRANQUILLITY
-The Neptune
-Thursday, Apr. 2, 2026
-7pm
-GET TICKETS
-	
-APR. 2
-7:00 PM
- The Neptune Theatre
-1303 Northeast 45th Street, Seattle, WA 98105
-TICKETS & INFO
-	
 DAR WILLIAMS
 The Neptune Theatre
 Friday, Apr. 3, 2026
@@ -1493,6 +1480,18 @@ GET TICKETS
 	
 APR. 18
 4:00 PM
+ The Neptune Theatre
+1303 Northeast 45th Street, Seattle, WA 98105
+TICKETS & INFO
+	
+FANTASY FANGIRLS PODCAST
+The Neptune
+Sunday, Apr. 19, 2026
+6pm
+GET TICKETS
+	
+APR. 19
+6:00 PM
  The Neptune Theatre
 1303 Northeast 45th Street, Seattle, WA 98105
 TICKETS & INFO
