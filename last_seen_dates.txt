@@ -1107,7 +1107,7 @@ Accept All
 --- Cascades Ridgefield ---
 Skip to content
 
-51°
+52°
 
 SHOWS
 FILTER
@@ -1215,7 +1215,7 @@ Concert alerts straight to your inbox.
 
 SIGN UP
 
-This site is protected by reCAPTCHA Enterprise and the Google Privacy Policy and Terms of Service apply.
+This site is protected by reCAPTCHA.
 
 BROWSE
 Shows
