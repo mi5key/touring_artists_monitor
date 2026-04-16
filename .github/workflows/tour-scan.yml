@@ -2,7 +2,7 @@ name: Tour Scanner
 
 on:
   schedule:
-    - cron: '0 12 * * 0' # Runs every 6 hours
+    - cron: '0 12 * * 0'   # Runs every 6 hours
   workflow_dispatch:      # Allows manual trigger for testing
 
 jobs:
