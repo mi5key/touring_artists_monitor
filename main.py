@@ -44,7 +44,7 @@ async def analyze_with_gemini(all_data):
     
     Context:
     - User location: Salem, Oregon.
-    - Target Gap: March 14 (Santa Cruz, CA) to April 14 (Tucson, AZ).
+    - If there are no shows scheduled near the User location, do not send anything.
     
     Task:
     1. Identify any shows in Oregon (Portland, Salem, Eugene) or Washington (Seattle, Ridgefield).
